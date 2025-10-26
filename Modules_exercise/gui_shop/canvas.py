@@ -1,10 +1,10 @@
-from tkinter import *
+import tkinter as tk
 
 
 def create_app():
-    tk = Tk()
-    tk.geometry("700x600+0+0")
-    tk.title("GUI Product shop")
-    return tk
+    root = tk.Tk()
+    root.geometry("700x600+100+100")
+    root.title("GUI Product shop")
+    return root
 
-tk = create_app()
+app = create_app()

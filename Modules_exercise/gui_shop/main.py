@@ -1,7 +1,7 @@
 from authentication import render_main_enter_screen
-from canvas import tk
+from canvas import app
 
 
 if __name__ == "__main__":
     render_main_enter_screen()
-    tk.mainloop()
+    app.mainloop()
