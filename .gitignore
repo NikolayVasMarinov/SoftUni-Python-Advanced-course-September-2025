@@ -1,0 +1,34 @@
+# 🐍 Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# 🧪 Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# 🧰 IDE / Editor
+.vscode/
+.idea/
+*.iml
+
+# 📦 Package & Build
+build/
+dist/
+*.egg-info/
+
+# 🧾 Logs & Databases
+*.log
+*.sqlite3
+*.db
+
+# ⚙️ OS Files
+.DS_Store
+Thumbs.db
+
+# 🔐 Environment variables
+.env
