@@ -49,6 +49,9 @@ def login(username: str, password: str):
             name, pwd = line.strip().split(", ")
 
             if name == username and pwd == password:
+                with open("../db/current_user.txt", "w") as f:
+                    f.write(name)
+
                 render_products_screen()
                 return
 
