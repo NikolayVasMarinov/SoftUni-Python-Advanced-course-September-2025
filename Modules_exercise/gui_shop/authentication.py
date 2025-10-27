@@ -15,8 +15,11 @@ def register(username: str, password: str, first_name: str, last_name: str):
         "products": []
     }
 
-    with open("../db/user_credentials_db", "a") as f:
+    with open("../db/users", "a") as f:
         f.write(json.dumps(data) + "\n")
+
+    with open("../db/user_credentials_db", "a") as f:
+        f.write(f"{data['username']}, {data['password']}\n")
 
     render_login_screen()
 
@@ -43,9 +46,7 @@ def login(username: str, password: str):
     with open("../db/user_credentials_db") as file:
         data = file.readlines()
         for line in data:
-            user = json.loads(line)
-            name = user.get("username")
-            pwd = user.get("password")
+            name, pwd = line.strip().split(", ")
 
             if name == username and pwd == password:
                 render_products_screen()
