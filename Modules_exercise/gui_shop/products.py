@@ -6,7 +6,14 @@ from canvas import app
 from helpers import clean_screen
 
 
-def render_products_screen():
+def buy_product(count: int):
+    if count == 0:
+        render_products_screen(error="Out of stock")
+
+    else:
+        pass
+
+def render_products_screen(error: str = None):
     clean_screen()
 
     with open("../db/products") as f:
@@ -23,13 +30,17 @@ def render_products_screen():
             img = img.resize((200, 150))
             tk_img = ImageTk.PhotoImage(img)
 
-            label = tk.Label(app, image=tk_img)
-            label.img = tk_img
+            label = tk.Label(app, image=tk_img) #type: ignore
+            label.image = tk_img
             label.grid(row=1, column=i)
 
             tk.Label(app, text=product_count).grid(row=2, column=i)
 
             tk.Button(
                 app,
-                text=f"Buy {product_id}"
+                text=f"Buy {product_id}",
+                command=lambda c=int(product_count): buy_product(c)
             ).grid(row=3, column=i)
+
+        if error:
+            tk.Label(app, text=error).grid(row=4, column=0)
