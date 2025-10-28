@@ -33,22 +33,17 @@ def decrease_product_count(product_id):
         for p in products:
             f.write(json.dumps(p) + "\n")
 
-def buy_product(product_id: str, count: int):
-    if count == 0:
-        render_products_screen(error="Out of stock")
-        return
+def buy_product(product_id: str):
+    decrease_product_count(product_id)
 
-    else:
-        decrease_product_count(product_id)
+    with open("../db/current_user.txt") as f:
+        current_user = f.read().strip()
 
-        with open("../db/current_user.txt") as f:
-            current_user = f.read().strip()
-
-        update_current_user(current_user, product_id)
+    update_current_user(current_user, product_id)
 
     render_products_screen()
 
-def render_products_screen(error: str = None):
+def render_products_screen():
     clean_screen()
 
     with open("../db/products") as f:
@@ -58,7 +53,10 @@ def render_products_screen(error: str = None):
             product_id = product.get("id")
             product_name = product.get("name")
             product_img_path = product.get("img_path")
-            product_count = product.get("count")
+            product_count = int(product.get("count"))
+
+            if product_count == 0:
+                continue
 
             lines_per_product = len(product)
 
@@ -80,8 +78,5 @@ def render_products_screen(error: str = None):
             tk.Button(
                 app,
                 text=f"Buy {product_id}",
-                command=lambda c=int(product_count), p_id=product_id: buy_product(p_id, c)
+                command=lambda p_id=product_id: buy_product(p_id)
             ).grid(row=row + 3, column=col)
-
-        if error:
-            tk.Label(app, text=error).grid(row=row + 4, column=0)
