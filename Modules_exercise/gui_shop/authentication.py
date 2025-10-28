@@ -6,24 +6,23 @@ from helpers import clean_screen
 from products import render_products_screen
 
 
-def register(username: str, password: str, first_name: str, last_name: str):
-    data = {
-        "username": username,
-        "password": password,
-        "first name": first_name,
-        "last name": last_name,
-        "products": []
-    }
+def register(**user):
+    user["products"] = []
 
-    with open("../db/users", "a") as f:
-        f.write(json.dumps(data) + "\n")
+    with open("../db/user_credentials_db", "r+") as f:
+        users = [line.strip().split(", ")[0] for line in f]
+        if user["username"] in users:
+            render_register_screen(error="User already exists!")
+            return
 
-    with open("../db/user_credentials_db", "a") as f:
-        f.write(f"{data['username']}, {data['password']}\n")
+        f.write(f"{user['username']}, {user['password']}\n")
+
+    with open("../db/users", "r+") as f:
+        f.write(json.dumps(user) + "\n")
 
     render_login_screen()
 
-def render_register_screen():
+def render_register_screen(error: str = None):
     clean_screen()
     username = tk.Entry(app)
     username.grid(row=0, column=0)
@@ -39,8 +38,16 @@ def render_register_screen():
         text="Register",
         bg="green",
         fg="white",
-        command=lambda: register(username.get(), password.get(), first_name.get(), last_name.get())
+        command=lambda: register(
+            username=username.get(),
+            password=password.get(),
+            first_name=first_name.get(),
+            last_name=last_name.get()
+        )
     ).grid(row=4, column=0)
+
+    if error:
+        tk.Label(app, text=error).grid(row=5, column=0)
 
 def login(username: str, password: str):
     with open("../db/user_credentials_db") as file:
