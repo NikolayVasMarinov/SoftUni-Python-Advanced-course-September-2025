@@ -52,6 +52,7 @@ def render_products_screen(error: str = None):
     clean_screen()
 
     with open("../db/products") as f:
+        max_products_per_line = 3
         for i, line in enumerate(f):
             product = json.loads(line)
             product_id = product.get("id")
@@ -59,7 +60,12 @@ def render_products_screen(error: str = None):
             product_img_path = product.get("img_path")
             product_count = product.get("count")
 
-            tk.Label(app, text=product_name).grid(row=0, column=i)
+            lines_per_product = len(product)
+
+            row = i // max_products_per_line * lines_per_product
+            col = i % max_products_per_line
+
+            tk.Label(app, text=product_name).grid(row=row, column=col)
 
             img = Image.open(f"../db/{product_img_path}")
             img = img.resize((200, 150))
@@ -67,15 +73,15 @@ def render_products_screen(error: str = None):
 
             label = tk.Label(app, image=tk_img) #type: ignore
             label.image = tk_img
-            label.grid(row=1, column=i)
+            label.grid(row=row + 1, column=col)
 
-            tk.Label(app, text=product_count).grid(row=2, column=i)
+            tk.Label(app, text=product_count).grid(row=row + 2, column=col)
 
             tk.Button(
                 app,
                 text=f"Buy {product_id}",
                 command=lambda c=int(product_count), p_id=product_id: buy_product(p_id, c)
-            ).grid(row=3, column=i)
+            ).grid(row=row + 3, column=col)
 
         if error:
-            tk.Label(app, text=error).grid(row=4, column=0)
+            tk.Label(app, text=error).grid(row=row + 4, column=0)
