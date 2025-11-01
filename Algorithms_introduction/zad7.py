@@ -9,4 +9,4 @@ numbers: list[int] = list(map(int, input().split()))
 
 selection_sort(numbers)
 
-print(" ".join(map(str, numbers)))
+print(*numbers)

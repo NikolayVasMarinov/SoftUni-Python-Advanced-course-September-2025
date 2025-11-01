@@ -10,4 +10,4 @@ numbers: list[int] = list(map(int, input().split()))
 
 bubble_sort(numbers)
 
-print(" ".join(map(str, numbers)))
+print(*numbers)
